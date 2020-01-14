@@ -1,0 +1,173 @@
+ <html>
+ <head>
+     <meta charset="utf-8"/>
+     <title> To Do App </title>
+</head>
+<body background="bck2.jpg">
+    <div id ="header">
+        
+            <h2>Welcome <span id ="activeUser"></span> </h2>
+            <script>document.getElementById("activeUser").innerHTML = sessionStorage.getItem('activeUser');
+                </script>
+        <p>
+            <img id ="profile_image" alt='Profile Pic' onchange="readFile()" style='width:9%;border-radius: 45%;'>        
+        
+            <input type="button" value="Update Profile" onclick="location.href = 'profile.html'">
+            <input type="button" value="Logout" onclick="logout()">
+        </p> 
+    </div>
+
+    <p id="time_date"> </p>
+
+    <hr>
+
+    <div id="myDIV">
+        <input type="text" id="category_name" placeholder="Title...">
+        <input type="button" onclick="add_category()"  value ="Add New Category"/>
+    </div>
+
+    <div id ="filter">
+        <h3><u>Add New To-do Task</u></h3>
+        <table border="2">
+            <thead>
+                <th>Category</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Task Details</th>
+                <th id="status_columnName">Status</th>
+                <th>isReminder</th>
+                <th>Reminder Date</th>
+                <th>isPublic</th>
+            </thead>
+            <tr>
+                <td><select id="category"></select> </td>
+                <td><input type="date" id ="start_date" onchange="date_validation()"/></td>
+                <td><input type="date" id ="end_date" onchange="date_validation()"/></td>
+                <td>
+                        <textarea rows="2" cols="30" placeholder="Enter Task Description here..." id ="task" style="resize: none;"></textarea>
+                </td>
+                <td id="status_columnData">
+                        <select id="status">
+                            <option value="To-Do">To-Do</option>
+                            <option value="In-Progress">In-Progress</option>
+                            <option value="Done">Done</option>
+                        </select>
+                </td>
+                <td><input type="radio" id="isReminder_yes" name="isReminder" value="Yes">
+                    <label for="isReminder_yes">Yes</label> 
+                    <input type="radio" id="isReminder_no" name="isReminder" value="No">
+                    <label for="isReminder_no">No</label> 
+                </td>
+                <td>
+                        <input type="date" id="isReminder_date" onchange="reminder_validation()">
+                </td>
+                <td>
+                        <input type="radio" id="isPublic_yes" name="isPublic" value="Yes">
+                        <label for="isPublic_yes">Yes</label> 
+                        <input type="radio" id="isPublic_no" name="isPublic" value="No">
+                        <label for="isPublic_no">No</label> 
+                </td>
+
+            </tr>
+        </table>    
+        
+        <br>
+        <input type="button" onclick="to_do()"  value ="Add Task" id="Add_Task">
+        
+        <hr>   
+    </div>
+  
+<div id ="search_filter">
+    <table border="0">
+        <tr>
+            <td>
+                    Search By :                
+                    <select id="search_by" onchange="selected_searchItem()">
+                            <option value="Category">Category</option>
+                            <option value="Start_date">Start_date</option>
+                            <option value="End_date">End_date</option>
+                            <option value="Status">Status</option>
+                            <option value="Task Details">Task Details</option>
+                    </select> 
+            </td>
+            <td>
+                    <p id ="searchby_category">
+                            Category : <select id="category_search"> </select> 
+                    </p>
+
+                    <p id ="searchby_StartDate">
+                            Start Date : <input type="date" id ="startdate_search" />
+                    </p>
+            
+                    <p id ="searchby_EndDate">
+                            End Date : <input type="date" id ="enddate_search" />
+                    </p>
+            
+                    <p id ="searchby_status">
+                            Status : 
+                            <select id="status_search">
+                                <option value="To-Do">To-Do</option>
+                                <option value="In-Progress">In-Progress</option>
+                                <option value="Done">Done</option>
+                            </select>
+                    </p>
+
+                    <p id ="task_detail">
+                        <input type="text" id="task_details" placeholder="Type to search">
+                    </p>
+
+            </td>
+            <td>
+                    <input type="button" value="Search Record" id="Search_btn" onclick="to_do_search()">
+            </td>
+        </tr>
+    </table>
+
+        <hr>
+  
+    <div id ="content">
+        <h2> <u>My To Do List</u></h2>
+
+        <p>
+            <input type="button" id="Edit_btn" value="EditMode" onclick="todo_EditMode()">
+            <input type="button" id="Update_btn" value="Update" onclick="todo_Update()">
+            <input type="button" id="Delete_btn" value="Delete" onclick="todo_Delete()">
+        </p>
+        <table id ="todolist" border="2">
+            <tr>
+                <th>Category</th>
+                <th>Task</th>
+                <th>Start_date</th>
+                <th>End_date</th>
+                <th>Status</th>
+                <th>isReminder</th>
+                <th>Reminder Date</th>
+                <th>isPublic</th>
+                <th>Action</th>
+            </tr>
+
+        </table>
+
+        <table id ="search_list" border="2">
+            <thead>
+                <th>Category</th>
+                <th>Task</th>
+                <th>Start_date</th>
+                <th>End_date</th>
+                <th>Status</th>
+                <th>isReminder</th>
+                <th>Reminder Date</th>
+                <th>isPublic</th>
+                <th>Action</th>
+            </thead>
+            <tbody id="table_data"></tbody>
+        </table>
+
+    </div>
+
+    <script src ="to-do-mainpage.js" ></script>
+    <script src ="logout.js" ></script>
+    <script src ="records.js" ></script>
+
+</body>
+</html>

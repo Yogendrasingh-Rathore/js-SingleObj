@@ -1,0 +1,8 @@
+version: 2.1
+workflows:
+  deploy_application:
+    jobs:
+      - aws-code-deploy/deploy:
+          application-name: js-todo
+          deployment-group: js-todo
+          service-role-arn: arn:aws:iam::539551904532:role/js

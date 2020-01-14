@@ -1,0 +1,92 @@
+<html>
+    <head>
+            <meta charset="utf-8"/>
+        <title>Profile Page</title>
+    </head>
+    <body>
+        <h1>Update Profile of <span id ="activeUser"></span> </h1>
+        <script>document.getElementById("activeUser").innerHTML = sessionStorage.getItem('activeUser');
+        </script>
+        <h1>
+            <input type="button" value="Logout" onclick="logout()">
+            <input type="button" value="Back To Home" onclick="(function ()
+            { location.href = 'to-do-mainpage.html'})()">
+        </h1>
+
+        <table border="2">
+            <tr>
+                <th>
+                    User Name :
+                </th>
+                <td>
+                    <input type="text" id="userName" disabled>
+                </td>
+            </tr>
+            <form method="POST">
+            <tr>
+                <th>
+                    Old Password :
+                </th>
+                <td>
+                    <input type="password" id="old_password">
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    New Password :
+                </th>
+                <td>
+                    <input type="password" id="new_password">
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Confirm Password :
+                </th>
+                <td>
+                    <input type="password" id="confirm_new_password">
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Gender :
+                </th>
+                <td>
+                    <input type="radio" name="gender" value="male" id="gender_male"> 
+                                <label for="gender_male">Male</label> 
+                                <input type="radio" name="gender" value="female" id="gender_female">
+                                <label for="gender_female">Female</label>
+                                <input type="radio" name="gender" value="other" id="gender_other">
+                                <label for="gender_other">Other</label>
+                </td>
+            </tr>
+            <tr>
+                <th> Email : </th>
+                <td> <input type="email" id="email" required /> </td>
+            </tr>
+            <tr>
+                <th> Address : </th>
+                <td> <textarea id="address" cols="33" rows="5" style="resize: none;" required > </textarea> </td>
+            </tr>
+
+            <tr>
+                <th> Profile Picture : </th>
+                <td>
+                    <img src="profile.jpg" alt="Profile Pic" style="width:10%;border-radius: 50%;"></img>
+                     <input type="file" id="profile_pic" accept="image/*" required /> 
+                </td>
+            </tr>
+
+            <tr>
+                <td> <input type="button" value="Update Profile" id="update_profile" onclick="profile_validation()"/> </td>
+                <td> <input type="reset"> </td>
+            </tr>
+        </form>
+        </table>
+
+        <script src ="profile.js" ></script>
+        <script src ="logout.js" ></script>
+        <script src ="validation.js" ></script>
+
+    </body>
+</html>

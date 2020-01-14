@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>To-Do Homepage</title>
+              
+        
+    </head>
+    <body background="background.jpg">
+        <div id="title">
+            <center><h1> Welcome To the To-Do Homepage</h1></center>
+        </div>
+        <hr>
+
+        <div id="login_div">
+            <input type="button" value="Login" id="login_btn" onclick="login_fn()" style="float: right;"/>
+           
+            <input type="button" value="Create Your Account" id="register_btn" onclick="register_fn()" style="float: right;">
+        </div>
+
+        <br>
+        <br>
+        <hr>
+
+
+        <div id ="register">
+            <form method="POST">
+                <center>
+                    <h2> Create Your Account </h2>
+                    <table border="1">
+                        <tr>
+                            <th> Username : </th>
+                            <td> <input type="text" id="r_uname" required /> </td>
+                        </tr>
+                        <tr>
+                            <th> Password : </th>
+                            <td> <input type="password" id="r_password" required /> </td>
+                        </tr>
+                        <tr>
+                            <th> Confirm Password : </th>
+                            <td> <input type="password" id="r_cpassword" required /> </td>
+                        </tr>
+                        <tr>
+                            <th> Gender : </th>
+                            <td> <input type="radio" name="gender" value="male" id="gender_male"> 
+                                <label for="gender_male">Male</label> 
+                                <input type="radio" name="gender" value="female" id="gender_female">
+                                <label for="gender_female">Female</label>
+                                <input type="radio" name="gender" value="other" id="gender_other">
+                                <label for="gender_other">Other</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th> Email : </th>
+                            <td> <input type="email" id="email" required /> </td>
+                        </tr>
+                        <tr>
+                            <th> Address : </th>
+                            <td> <textarea id="address" cols="33" rows="5" style="resize: none;" > </textarea> </td>
+                        </tr>
+
+                        <tr>
+                            <th> Profile Picture : </th>
+                            <td> <input type="file" onchange="profile_image()" id="profile_pic" accept="image/*" /> </td>
+                        </tr>
+
+                        <tr>
+                            <td> <input type="button" value="Register" id="Register" onclick="validation()"/> </td>
+                            <td> <input type="reset"> </td>
+                        </tr>
+
+                    </table>
+                </center>
+            </form>
+        </div>        
+
+        <div id = "login">
+            <form method="POST" action="">
+                <center>
+                <h2> Sign In Your Account </h2>
+                    <table border="1">
+                        <tr>
+                            <th> Username / Email id : </th>
+                            <td> <input type="text" id="l_uname" required /> </td>
+                        </tr>
+                        <tr>
+                            <th> Password : </th>
+                            <td> <input type="password" id="l_password" required /> </td>
+                        </tr>
+                        <tr>
+                            <td> <input type="button" value="login" id="login" onclick="auth()"/> </td>
+                            <td> <input type="reset"> </td>
+                        </tr>
+                    </table>
+                </center>
+            </form>
+        </div>
+
+        <img id ="displayProfileImage" height="150" width="150">
+        <div id="result">
+              
+        </div>
+
+        <script src="homepage.js"> </script>
+        <script src="login.js"></script>
+        
+    </body>
+</html>
