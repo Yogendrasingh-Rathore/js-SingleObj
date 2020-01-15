@@ -14,30 +14,29 @@
     document.getElementById("status_columnData").style.display = "none";
     document.getElementById("search_list").style.display = "none";
     document.getElementById("Update_btn").style.display = "none";
-    let get_userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
     
-    for(key in get_userData.Category)
-    {        
-            let sel = document.getElementById('category');
-            let opt = document.createElement('option');
-            
-            opt.text = opt.value = get_userData.Category[key]; 
-            sel.add(opt, key); 
- 
-    }
+    category_onload('category');
+    category_onload('category_search');
 
-    for(key in get_userData.Category)
-    {        
-            let sel = document.getElementById('category_search');
-            let opt = document.createElement('option');
-            
-            opt.text = opt.value = get_userData.Category[key]; 
-            sel.add(opt, key); 
- 
-    }
-    
 })();
 
+function category_onload(category_elementId)
+{
+    let get_userData = JSON.parse(localStorage.getItem('users'));
+    for (i = 0; i < get_userData.length; i++) {
+        if(get_userData[i].userName === sessionStorage.activeUser)
+        {
+            for(key in get_userData[i].Category)
+            {        
+                let sel = document.getElementById(category_elementId);
+                let opt = document.createElement('option');            
+                
+                opt.text = opt.value = get_userData[i].Category[key]; 
+                sel.add(opt, key); 
+            }
+        }
+    }
+}
 
 
 function selected_searchItem()
@@ -95,20 +94,29 @@ function add_category()
 {
     let category_name = document.getElementById('category_name').value;
 
-    let get_userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
-    get_userData.Category.push(category_name);  
+    let get_userData = JSON.parse(localStorage.getItem('users'));
 
-    localStorage.setItem(sessionStorage.getItem('activeUser'),JSON.stringify(get_userData));     
+    for (i = 0; i < get_userData.length; i++) {
+        if(get_userData[i].userName === sessionStorage.activeUser &&
+           get_userData[i].Category.push(category_name));  
+    }
+    localStorage.setItem("users",JSON.stringify(get_userData));     
 
-    let get_userData2 = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
+    let get_userData2 = JSON.parse(localStorage.getItem('users'));
     
-    for(key in get_userData2.Category)
-    {        
-            let sel = document.getElementById('category');
-            let opt = document.createElement('option');            
-            
-            opt.text = opt.value = get_userData2.Category[key]; 
-            sel.add(opt, key); 
+    for (i = 0; i < get_userData2.length; i++) {
+        if(get_userData2[i].userName === sessionStorage.activeUser)
+        {
+            for(key in get_userData2[i].Category)
+            {        
+                let sel = document.getElementById('category');
+                let opt = document.createElement('option');            
+                
+                opt.text = opt.value = get_userData2[i].Category[key]; 
+                sel.add(opt, key); 
+                alert(get_userData2[i].Category[key]);
+            }
+        }
     }
 
     alert(category_name + "  Added");

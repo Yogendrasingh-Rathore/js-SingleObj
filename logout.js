@@ -2,5 +2,5 @@ function logout()
 {
         sessionStorage.clear();
         alert("Logout Success");
-        location.replace("homepage.html");    
+        location.replace("registration.html");    
 }

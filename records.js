@@ -1,23 +1,28 @@
 (function ()
-{
-    
-    let get_userData = {};
-    get_userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
-    let to_do_list = [];
-    to_do_list = get_userData.todo;
-    let todoid;
-
+{ 
     let profile_image = document.getElementById("profile_image");
+    let get_userData = [];
+    get_userData = JSON.parse(localStorage.getItem('users'));
     let pic_address = get_userData['userImage'];   
     
     profile_image.innerHTML = profile_image.setAttribute("src",pic_address);
 
     let d = new Date();
 
+    display();
+
+})();
+
+function display()
+{
+    let get_userData = [];
+    get_userData = JSON.parse(localStorage.getItem('users'));
+    let to_do_list = [];
+    to_do_list = get_userData.todo;
+    let todoid;
+
     for(key in to_do_list)
-    {        
-        if(to_do_list.hasOwnProperty(key) ){
-           
+    {    
             let data = [];
             data = Object.values(to_do_list[key]);
             let tr = document.createElement("TR");
@@ -44,11 +49,8 @@
             }                      
         }
         
-        createButton(todoid,"todolist");
-        
-    } 
-
-})();
+        createButton(todoid,"todolist"); 
+}
 
 function to_do()
 {
@@ -63,7 +65,7 @@ function to_do()
 
     if(flag == 0)
     {
-        let userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
+        let userData = JSON.parse(localStorage.getItem('users'));
 
         let e = document.getElementById("category");
         let category = e.options[e.selectedIndex].value;
@@ -78,12 +80,9 @@ function to_do()
         let isPublic_no = document.getElementById("isPublic_no");
         let isReminder, isPublic;
 
-        if(isReminder_yes.checked == true)
-        {
+        if(isReminder_yes.checked == true){
             isReminder = "Yes";
-        }
-        else
-        {
+        }else{
             isReminder = "No";
         }
 
@@ -107,14 +106,19 @@ function to_do()
             isPublic : isPublic
         };
         
-        obj.user = sessionStorage.getItem('activeUser');
-            
-        userData.toDoId++;
-        obj.id = userData.toDoId;
+        // obj.user = sessionStorage.getItem('activeUser');
 
-        userData.todo.push(obj);
+        
+        for (i = 0; i < userData.length; i++) {
+            if (sessionStorage.activeUser === userData[i].userName) {
+                userData[i].toDoId++;        
+                obj.id = userData[i].toDoId;
+                userData[i].todo.push(obj);
+                localStorage.setItem("users",JSON.stringify(userData));
+                break;
+            }
+        }
 
-        localStorage.setItem(sessionStorage.getItem('activeUser'),JSON.stringify(userData));     
         cleanup();
         location.reload();        
     }
@@ -148,10 +152,8 @@ function todo_EditMode()
 {
     let checkboxes = document.getElementsByName("checkbox");
     let counter=0;
-    let flag;
         
-    for (let i=0; i<checkboxes.length; i++) {
-           
+    for (let i=0; i<checkboxes.length; i++) {    
         if (checkboxes[i].checked) {
             counter++;
             if(counter > 1)
@@ -180,18 +182,25 @@ function todo_EditMode()
         let isPublic_no = document.getElementById("isPublic_no");
         let isReminder, isPublic;
 
-        let get_userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
+        let get_userData = JSON.parse(localStorage.getItem("users"));
 
-        let to_do_list = [];
-        to_do_list = get_userData.todo;    
-
+        var to_do_list = [];
+        
+        for (i = 0; i < get_userData.length; i++) {
+            alert(to_do_list);
+            if (sessionStorage.activeUser === get_userData[i].userName) {
+                
+                to_do_list = get_userData[i].todo; 
+                alert(to_do_list);
+            }
+        }
+        
+        alert(to_do_list);
         for(key in to_do_list)
-        {        
-            if(to_do_list.hasOwnProperty(key) ){
-            
+        {             
                 let data = [];
                 data = Object.values(to_do_list[key]);
-
+                alert(data);
                 if(data[9] == checkbox_id)
                 {
                     
@@ -230,7 +239,7 @@ function todo_EditMode()
                     break;
                 }
                 
-            }
+            
         }
     }
 
@@ -240,7 +249,7 @@ function todo_Delete()
 {
     let checkboxes = document.getElementsByName("checkbox");
     
-    let get_userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
+    let get_userData = JSON.parse(localStorage.getItem("users"));
     let to_do_list = [];
     to_do_list = get_userData.todo;
 
@@ -248,7 +257,7 @@ function todo_Delete()
         if (checkboxes[i].checked) {
             to_do_list.splice(i, 1);
             get_userData.todo = to_do_list;       
-            localStorage.setItem(sessionStorage.getItem('activeUser'),JSON.stringify(get_userData));                 
+            localStorage.setItem("users",JSON.stringify(get_userData));                 
         }
     }  
     location.reload();
@@ -285,7 +294,7 @@ function todo_Update()
 
         if(flag == 0)
         {
-            let get_userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
+            let get_userData = JSON.parse(localStorage.getItem("users"));
 
             let to_do_list = [];
             to_do_list = get_userData.todo;
@@ -356,7 +365,7 @@ function todo_Update()
             }
             get_userData.todo = to_do_list;
 
-            localStorage.setItem(sessionStorage.getItem('activeUser'),JSON.stringify(get_userData));     
+            localStorage.setItem("users",JSON.stringify(get_userData));     
             cleanup();
             location.reload();
         }
@@ -522,7 +531,7 @@ function to_do_search()
 
     empty_table();
 
-    let get_userData = JSON.parse(localStorage.getItem(sessionStorage.getItem('activeUser')));
+    let get_userData = JSON.parse(localStorage.getItem('users'));
     let to_do_list = [];
     to_do_list = get_userData.todo;
     let todoid;
