@@ -12,7 +12,6 @@ function auth()
     }
     
     for (i = 0; i < users.length; i++) {
-         alert(users[i].userName +" "+users[i].password);
         if (userName === users[i].userName && password === users[i].password || 
             userName === users[i].email && password === users[i].password) {
             sessionStorage.setItem("activeUser",users[i].userName);

@@ -10,7 +10,7 @@
             <script>document.getElementById("activeUser").innerHTML = sessionStorage.getItem('activeUser');
                 </script>
         <p>
-            <img id ="profile_image" alt='Profile Pic' onchange="readFile()" style='width:9%;border-radius: 45%;'>        
+            <img id ="displayProfileImage" alt='Profile Pic' style='width:9%;border-radius: 45%;'>        
         
             <input type="button" value="Update Profile" onclick="location.href = 'profile.html'">
             <input type="button" value="Logout" onclick="logout()">
@@ -39,7 +39,6 @@
                 <th>Reminder Date</th>
                 <th>isPublic</th>
             </thead>
-            <tr>
                 <td><select id="category"></select> </td>
                 <td><input type="date" id ="start_date" onchange="date_validation()"/></td>
                 <td><input type="date" id ="end_date" onchange="date_validation()"/></td>
@@ -67,8 +66,12 @@
                         <input type="radio" id="isPublic_no" name="isPublic" value="No">
                         <label for="isPublic_no">No</label> 
                 </td>
-
+                <td id="Update_btn">
+                    <input type="button" value="Update This Record" onclick="todo_Update()">
+                </td>
+                
             </tr>
+            
         </table>    
         
         <br>
@@ -130,7 +133,6 @@
 
         <p>
             <input type="button" id="Edit_btn" value="EditMode" onclick="todo_EditMode()">
-            <input type="button" id="Update_btn" value="Update" onclick="todo_Update()">
             <input type="button" id="Delete_btn" value="Delete" onclick="todo_Delete()">
         </p>
         <table id ="todolist" border="2">
