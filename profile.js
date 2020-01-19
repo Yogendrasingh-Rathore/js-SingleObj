@@ -1,6 +1,6 @@
 (function () {
     if (!sessionStorage.getItem('activeUser')) {
-        location.replace("homepage.html");
+        location.replace("registration.html");
     }
 
     let get_userData = {};
@@ -47,14 +47,8 @@ function profile_validation() {
     let flag = 1;
     let old_password = document.getElementById("old_password").value;
     let new_password = document.getElementById("new_password").value;
-    let uname = document.getElementById("userName").value;
     let confirm_password = document.getElementById("confirm_new_password").value;
-    let gender_male = document.getElementById("gender_male");
-    let gender_female = document.getElementById("gender_female");
-    let gender_other = document.getElementById("gender_other");
     let email = document.getElementById("email").value;
-    let address = document.getElementById("address").value;
-    let profile_pic = document.getElementById("profile_pic").value;
 
 
     let get_userData = {};
@@ -69,10 +63,9 @@ function profile_validation() {
         }
     }
 
-    if(old_password =="" && new_password != "")
-    {
+    if (old_password == "" && new_password != "") {
         alert("To Change password, Must Enter the old Password");
-        flag =0;
+        flag = 0;
     }
 
     let patt_password = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
@@ -114,24 +107,16 @@ function profile_update() {
 
     for (i = 0; i < get_userData.length; i++) {
         if (sessionStorage.getItem("activeUser") === get_userData[i].userName) {
-            
+
             if (new_password != "") {
                 get_userData[i].password = document.getElementById("new_password").value;
             }
-            else {
-                get_userData[i].password = get_userData.password;
-            }
 
-            if (gender_male.checked == true) {
-                get_userData[i].gender = document.getElementById("gender_male").value;
+            let gender = document.querySelector('input[name="gender"]:checked');
+            if (gender != null) {
+                gender = document.querySelector('input[name="gender"]:checked').value;
+                get_userData[i].gender = gender;
             }
-            else if (gender_female.checked == true) {
-                get_userData[i].gender = document.getElementById("gender_female").value;
-            }
-            else {
-                get_userData[i].gender = document.getElementById("gender_other").value;
-            }
-
 
             get_userData[i].email = document.getElementById("email").value;
             get_userData[i].address = document.getElementById("address").value;
