@@ -1,19 +1,5 @@
 (function () {
-    let profile_image = document.getElementById("displayProfileImage");
-    let get_userData = [];
-    get_userData = JSON.parse(localStorage.getItem('users'));
-
-    for (i = 0; i < get_userData.length; i++) {
-        if (sessionStorage.getItem("activeUser") === get_userData[i].userName) {
-            let pic_address = get_userData[i].userImage;
-            profile_image.innerHTML = profile_image.setAttribute("src", pic_address);
-            break;
-        }
-    }
-
-    let d = new Date();
     display_todolist();
-
 })();
 
 function get_todolist(get_userData) {
@@ -92,8 +78,6 @@ function to_do() {
             isPublic: isPublic
         };
 
-        // obj.user = sessionStorage.getItem('activeUser');
-
 
         for (i = 0; i < userData.length; i++) {
             if (sessionStorage.activeUser === userData[i].userName) {
@@ -130,7 +114,7 @@ function createButton(checkbox_id, flag) {
 }
 
 function todo_EditMode() {
-    let checkbox_id = checkbox_selection();
+    let checkbox_id = checkbox_selection("EditMode");
 
     if (checkbox_id !== "false") {
         document.getElementById("status_columnName").style.display = "block";
@@ -152,7 +136,6 @@ function todo_EditMode() {
         for (key in to_do_list) {
             let data = [];
             data = Object.values(to_do_list[key]);
-            // alert(data + " " +data[1] + " "+data[9] +"  "+ checkbox_id);
 
             for (let key2 in data) {
 
@@ -193,6 +176,7 @@ function todo_EditMode() {
 }
 
 function todo_Delete() {
+    checkbox_selection("Delete");
     let checkboxes = document.getElementsByName("checkbox");
 
     let get_userData = JSON.parse(localStorage.getItem("users"));
@@ -201,7 +185,7 @@ function todo_Delete() {
 
     for (let i = checkboxes.length - 1; i >= 0; i--) {
         if (checkboxes[i].checked) {
-            let confirm_delete = confirm("Are you sure you want to delete this record?");
+            let confirm_delete = confirm("Are you sure you want to delete the record with record id : " + checkboxes[i].id + " ?");
             if (confirm_delete == true) {
                 to_do_list.splice(i, 1);
             }
@@ -210,7 +194,7 @@ function todo_Delete() {
 
     for (i = 0; i < get_userData.length; i++) {
         if (sessionStorage.activeUser === get_userData[i].userName) {
-            get_userData.todo = to_do_list;
+            get_userData[i].todo = to_do_list;
             localStorage.setItem("users", JSON.stringify(get_userData));
             break;
         }
@@ -218,7 +202,7 @@ function todo_Delete() {
     location.reload();
 }
 
-function checkbox_selection() {
+function checkbox_selection(flag) {
     let checkboxes = document.getElementsByName("checkbox");
     let counter = 0;
 
@@ -226,20 +210,24 @@ function checkbox_selection() {
 
         if (checkboxes[i].checked) {
             counter++;
-            if (counter > 1) {
-                alert("Multiple Selection is Not Allowed");
-                break;
+            if (flag != "Delete") {
+                if (counter > 1) {
+                    alert("Multiple Selection is Not Allowed");
+                    break;
+                }
+                checkbox_id = checkboxes[i].id;
             }
-            checkbox_id = checkboxes[i].id;
         }
     }
     if (counter < 1) {
         alert("No record selected, Must select a record!");
     }
-    if (counter == 1)
-        return checkbox_id;
-    else
-        return "false";
+    if (flag != "Delete") {
+        if (counter == 1)
+            return checkbox_id;
+        else
+            return "false";
+    }
 }
 
 function get_todo_category() {
@@ -270,12 +258,15 @@ function get_todo_task() {
 }
 
 function get_todo_isReminder() {
-    let isReminder = document.querySelector('input[name="isReminder"]:checked').value;
-    if (isReminder == true)
-        isReminder = "Yes";
-    else
+    if (document.querySelector('input[name="isReminder"]:checked') == "null") {
+        let isReminder = document.querySelector('input[name="isReminder"]:checked').value;
+        if (isReminder == true)
+            isReminder = "Yes";
+        else
+            isReminder = "No";
+    } else {
         isReminder = "No";
-
+    }
     return isReminder;
 }
 
@@ -285,17 +276,21 @@ function get_todo_isReminderDate() {
 }
 
 function get_todo_isPublic() {
-    let isPublic = document.querySelector('input[name="isPublic"]:checked').value;
-    if (isPublic == true)
-        isPublic = "Yes";
-    else
+    if (document.querySelector('input[name="isPublic"]:checked') == "null") {
+        let isPublic = document.querySelector('input[name="isPublic"]:checked').value;
+        if (isPublic == true)
+            isPublic = "Yes";
+        else
+            isPublic = "No";
+    } else {
         isPublic = "No";
+    }
 
     return isPublic;
 }
 
 function todo_Update() {
-    let checkbox_id = checkbox_selection();
+    let checkbox_id = checkbox_selection("Update");
 
     if (checkbox_id !== "false") {
         let category = get_todo_category();
@@ -539,28 +534,29 @@ function cleanup() {
 }
 
 function date_validation() {
-    let startDate = document.getElementById("start_date").value;
-    let endDate = document.getElementById("end_date").value;
+    let startDate = get_todo_startDate();
+    let endDate = get_todo_endDate();
 
-    let d = new Date();
-
-    let startDate_year = startDate.slice(0, 4);
-    let startDate_month = startDate.slice(5, 7);
-    let startDate_date = startDate.slice(8, 10);
+    var today = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
 
     function clear() {
         document.getElementById("end_date").value = "";
         document.getElementById("start_date").value = "";
     }
 
-    if (!(startDate_year >= d.getFullYear() && startDate_month >= (d.getMonth() + 1) && startDate_date >= d.getDate())) {
+    if (startDate < today ) {
         alert("Selected Date must be greater than or equal to today");
         clear();
     }
 
-    if ((Date.parse(startDate) >= Date.parse(endDate))) {
-        alert("End date should be greater than Start date");
+    if (startDate == "" && endDate != "" ){
+        alert("Must select Start Date before selecting End Date");
         clear();
+    }
+
+    if (Date.parse(startDate) >= Date.parse(endDate)) {
+        alert("End date should be greater than Start date");
+        document.getElementById("end_date").value = "";
     }
 }
 
