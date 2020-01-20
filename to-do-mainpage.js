@@ -107,39 +107,53 @@ function selected_searchItem() {
     }
 }
 
+// function isEmpty(element_id) {
+//     let element = document.getElementById(element_id).value;
+//     if (element == "") {
+//         alert("Field cannot be empty");
+//         return "empty";
+//     }
+// }
+
 function add_category() {
     let category_name = document.getElementById('category_name').value;
     let get_userData = JSON.parse(localStorage.getItem('users'));
     let flag = 0;
     let patt_alphabets = /[a-zA-Z]/;
 
-    if (patt_alphabets.test(category_name)) {
-        for (i = 0; i < get_userData.length; i++) {
-            if (get_userData[i].userName === sessionStorage.activeUser) {
-                for (key in get_userData[i].Category) {
-                    if (get_userData[i].Category[key] === category_name) {
-                        alert("Category Already Exists!");
-                        flag = 1;
-                        break;
+
+    if (category_name != "") {
+        if (patt_alphabets.test(category_name)) {
+            for (i = 0; i < get_userData.length; i++) {
+                if (get_userData[i].userName === sessionStorage.activeUser) {
+                    for (key in get_userData[i].Category) {
+                        if (get_userData[i].Category[key] === category_name) {
+                            alert("Category Already Exists!");
+                            flag = 1;
+                            break;
+                        }
+                        let sel = document.getElementById('category');
+                        let opt = document.createElement('option');
+
+                        opt.text = opt.value = get_userData[i].Category[key];
+                        sel.add(opt, key);
+
                     }
-                    let sel = document.getElementById('category');
-                    let opt = document.createElement('option');
-
-                    opt.text = opt.value = get_userData[i].Category[key];
-                    sel.add(opt, key);
-
-                }
-                if (flag != 1) {
-                    get_userData[i].Category.push(category_name);
-                    localStorage.setItem("users", JSON.stringify(get_userData));
-                    alert(category_name + "  Added");
+                    if (flag != 1) {
+                        get_userData[i].Category.push(category_name);
+                        localStorage.setItem("users", JSON.stringify(get_userData));
+                        alert(category_name + "  Added");
+                    }
                 }
             }
+        } else {
+            alert("Must contain alphabets also");
         }
-    } else {
-        alert("Must contain alphabets also");
+
+        cleanup();
+        location.reload();
+    } else{
+        alert("Field cannot be empty");
     }
 
-    cleanup();
-    location.reload();
 }

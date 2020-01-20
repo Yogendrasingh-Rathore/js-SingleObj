@@ -41,6 +41,7 @@ function display_todolist() {
             }
         }
 
+        let d = new Date();
         if (data[5] == "Yes" && new Date(data[6]).getDate() == d.getDate() && new Date(data[6]).getMonth() == d.getMonth() && new Date(data[6]).getFullYear() == d.getFullYear()) {
             alert("Reminder for Task : " + data[1] + ' Start Date: ' + data[2] + ' End Date: ' + data[3] + ' Status: ' + data[4]);
         }
@@ -258,14 +259,13 @@ function get_todo_task() {
 }
 
 function get_todo_isReminder() {
-    if (document.querySelector('input[name="isReminder"]:checked') == "null") {
-        let isReminder = document.querySelector('input[name="isReminder"]:checked').value;
-        if (isReminder == true)
-            isReminder = "Yes";
-        else
-            isReminder = "No";
-    } else {
-        isReminder = "No";
+    let isReminder = "No";
+    if (document.querySelector('input[name="isReminder"]:checked') != null) {
+        isReminder = document.querySelector('input[name="isReminder"]:checked').value;
+        // if (isReminder == "Yes")
+        //     isReminder = "Yes";
+        // else
+        //     isReminder = "No";
     }
     return isReminder;
 }
@@ -417,23 +417,31 @@ function searchby_endDate(to_do_list, selected_data) {
 }
 
 function searchby_DateRange(to_do_list, start_date, end_date) {
+    let endDateValidation = endDate_validation(start_date, end_date);
+    let emptyDateValidation = emptyDate_validation(start_date, end_date);
+    let startEndDateValidation = startEndDate_validation(start_date, end_date);
     let found = "false";
-    for (key in to_do_list) {
-        let data = [];
-        data = Object.values(to_do_list[key]);
 
-        todoid = data[8];
-        let v = new Date(data[2]);
-        let w = new Date(data[3]);
-        let selected_startDate = new Date(start_date);
-        let selected_endDate = new Date(end_date);
-        if (v.getTime() >= selected_startDate.getTime() && w.getTime() <= selected_endDate.getTime()) {
-            found = "true";
-            table_data_appendChild(data);
+    if (endDateValidation != "false" && emptyDateValidation != "false" && startEndDateValidation != "false") {
+        for (key in to_do_list) {
+            let data = [];
+            data = Object.values(to_do_list[key]);
+
+            todoid = data[8];
+            let v = new Date(data[2]);
+            let w = new Date(data[3]);
+            let selected_startDate = new Date(start_date);
+            let selected_endDate = new Date(end_date);
+            if (v.getTime() >= selected_startDate.getTime() && w.getTime() <= selected_endDate.getTime()) {
+                found = "true";
+                table_data_appendChild(data);
+            }
         }
+        NoRecordFound(found);
     }
-    NoRecordFound(found);
 }
+
+
 
 function searchby_status(to_do_list, selected_data) {
     let found = "false";
@@ -539,24 +547,60 @@ function date_validation() {
 
     var today = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
 
-    function clear() {
-        document.getElementById("end_date").value = "";
-        document.getElementById("start_date").value = "";
-    }
+    emptyDate_validation(startDate, endDate);
 
-    if (startDate < today ) {
+    if (startDate < today) {
         alert("Selected Date must be greater than or equal to today");
         clear();
-    }
+    } 
 
     if (startDate == "" && endDate != "" ){
         alert("Must select Start Date before selecting End Date");
         clear();
     }
 
+    if (Date.parse(startDate) > Date.parse(endDate)) {
+        alert("End date should be greater than Start date");
+        document.getElementById("end_date").value = "";
+    }
+    
+}
+
+function clear() {
+    document.getElementById("end_date").value = "";
+    document.getElementById("start_date").value = "";
+}
+
+function startEndDate_validation(startDate, endDate) {
+    if (startDate == "" && endDate != "") {
+        alert("Must select Start Date before selecting End Date");
+        clear();
+        return "false";
+    } else if(startDate != "" && endDate == "") {
+        alert("Must select the end date");
+        return "false";
+    } else {
+        return "true";
+    }
+}
+
+function emptyDate_validation(startDate, endDate) {
+    if (startDate == "" && endDate == "") {
+        alert("Must select Start & End Date");
+        clear();
+        return "false";
+    } else {
+        return "true";
+    }
+}
+
+function endDate_validation(startDate, endDate) {
     if (Date.parse(startDate) >= Date.parse(endDate)) {
         alert("End date should be greater than Start date");
         document.getElementById("end_date").value = "";
+        return "false";
+    } else {
+        return "true";
     }
 }
 
@@ -568,33 +612,23 @@ function reminder_validation() {
     let flag = 0;
 
     if (start_date == "" || end_date == "") {
+        alert("Cannot Add To-Do, Must have Start and End Date");
         flag = 1;
     } else if (isReminder_date < start_date && isReminder == "Yes" || isReminder_date > end_date && isReminder == "Yes") {
+        alert("The Reminder Date must be between " + start_date + " and " + end_date);
+        document.getElementById("isReminder_date").value = "";
         flag = 2;
     } else if (isReminder == "Yes" && isReminder_date == "") {
+        alert("Cannot Add To-Do, Must Set the Reminder Date!");
         flag = 3;
     } else if (isReminder == "No" && isReminder_date != "") {
+        alert("Cannot Set Reminder Date, isReminder is Not Selected");
+        document.getElementById("isReminder_date").value = "";
         flag = 4;
-    } else if (isReminder == "No" && isReminder_date == "") {
-        flag = 0;
     }
 
-    switch (flag) {
-        case 1:
-            alert("Cannot Add To-Do, Must have Start and End Date");
-            break;
-        case 2:
-            alert("The Reminder Date must be between " + start_date + " and " + end_date);
-            document.getElementById("isReminder_date").value = "";
-            break;
-        case 3:
-            alert("Cannot Add To-Do, Must Set the Reminder Date!");
-            break;
-        case 4:
-            alert("Cannot Set Reminder Date, isReminder is Not Selected");
-            document.getElementById("isReminder_date").value = "";
-            break;
-    }
+
+
 
     return flag;
 }
