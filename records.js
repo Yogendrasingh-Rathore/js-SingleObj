@@ -322,7 +322,7 @@ function todo_Update() {
             for (i = 0; i < get_userData.length; i++) {
                 if (sessionStorage.activeUser === get_userData[i].userName) {
                     for (j = 0; j < get_userData[i].todo.length; j++) {
-                        alert(checkbox_id +"  "+get_userData[i].todo[j].id);
+                        // alert(checkbox_id +"  "+get_userData[i].todo[j].id);
                         if (checkbox_id == get_userData[i].todo[j].id) {
                             obj.id = get_userData[i].todo[j].id;
                             get_userData[i].todo[j] = obj;
