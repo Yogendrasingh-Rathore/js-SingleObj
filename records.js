@@ -276,15 +276,14 @@ function get_todo_isReminderDate() {
 }
 
 function get_todo_isPublic() {
-    if (document.querySelector('input[name="isPublic"]:checked') == "null") {
-        let isPublic = document.querySelector('input[name="isPublic"]:checked').value;
-        if (isPublic == true)
-            isPublic = "Yes";
-        else
-            isPublic = "No";
-    } else {
-        isPublic = "No";
-    }
+    let isPublic = "No";
+    if (document.querySelector('input[name="isPublic"]:checked') != null) {
+        isPublic = document.querySelector('input[name="isPublic"]:checked').value;
+        // if (isPublic == true)
+        //     isPublic = "Yes";
+        // else
+        //     isPublic = "No";
+    } 
 
     return isPublic;
 }
