@@ -52,6 +52,10 @@ function profile_validation() {
     let userName = document.getElementById("userName").value;
 
 
+    if(userName =="" || email == "" ){
+        alert("userName or email cannot be blank");
+        flag = 0;
+    }
     let get_userData = {};
     get_userData = JSON.parse(localStorage.getItem('users'));
 
