@@ -49,6 +49,7 @@ function profile_validation() {
     let new_password = document.getElementById("new_password").value;
     let confirm_password = document.getElementById("confirm_new_password").value;
     let email = document.getElementById("email").value;
+    let userName = document.getElementById("userName").value;
 
 
     let get_userData = {};
@@ -89,7 +90,7 @@ function profile_validation() {
 
 
     if (flag != 0) {
-        profile_update();
+        profile_update(userName, email);
     }
     else {
         alert("Your data is not Updated until you clear all the errors!");
@@ -98,36 +99,51 @@ function profile_validation() {
 }
 
 
-function profile_update() {
+function profile_update(userName, email) {
     let get_userData = {};
     get_userData = JSON.parse(localStorage.getItem('users'));
     let gender_male = document.getElementById("gender_male");
     let gender_female = document.getElementById("gender_female");
     let new_password = document.getElementById("new_password").value;
+    let flag=0;
 
-    for (i = 0; i < get_userData.length; i++) {
-        if (sessionStorage.getItem("activeUser") === get_userData[i].userName) {
+    if (sessionStorage.getItem("activeUser") != userName && userName != "") {
+        flag = check_ExistsUserName(userName);
+    }
 
-            if (new_password != "") {
-                get_userData[i].password = document.getElementById("new_password").value;
+    if (flag != 1 && sessionStorage.getItem("email") != email && email != "") {
+        flag = check_ExistsEmail(email);
+    }
+
+    if (flag == 0) {
+        for (i = 0; i < get_userData.length; i++) {
+            if (sessionStorage.getItem("activeUser") === get_userData[i].userName) {
+
+                if (new_password != "") {
+                    get_userData[i].password = document.getElementById("new_password").value;
+                }
+
+                let gender = document.querySelector('input[name="gender"]:checked');
+                if (gender != null) {
+                    gender = document.querySelector('input[name="gender"]:checked').value;
+                    get_userData[i].gender = gender;
+                }
+
+                get_userData[i].userName = userName;
+                get_userData[i].email = email;
+                get_userData[i].address = document.getElementById("address").value;
+
+                let profile_pic = document.getElementById("profile_pic").value;
+                get_userData[i].userImage = sessionStorage.getItem("ImagePath");
+
+                localStorage.setItem("users", JSON.stringify(get_userData));
+                sessionStorage.setItem("activeUser",get_userData[i].userName);
+                sessionStorage.setItem("email",get_userData[i].email);
+                alert("Profile Updated");
+                break;
             }
-
-            let gender = document.querySelector('input[name="gender"]:checked');
-            if (gender != null) {
-                gender = document.querySelector('input[name="gender"]:checked').value;
-                get_userData[i].gender = gender;
-            }
-
-            get_userData[i].email = document.getElementById("email").value;
-            get_userData[i].address = document.getElementById("address").value;
-
-            let profile_pic = document.getElementById("profile_pic").value;
-            get_userData[i].userImage = sessionStorage.getItem("ImagePath");
-
-            localStorage.setItem("users", JSON.stringify(get_userData));
-            break;
         }
     }
 
-    alert("Profile Updated");
+    
 }

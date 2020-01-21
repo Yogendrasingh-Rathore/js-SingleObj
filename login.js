@@ -15,7 +15,7 @@ function auth()
         if (userName === users[i].userName && password === users[i].password || 
             userName === users[i].email && password === users[i].password) {
             sessionStorage.setItem("activeUser",users[i].userName);
-            alert("Login Successfull");
+            sessionStorage.setItem("email",users[i].email);
             flag = 1;
             break;
         }
@@ -24,7 +24,7 @@ function auth()
     if(flag == 0)
     {
         alert("Invalid Credentials");
-        location.href = 'registration.html';
+        // location.href = 'registration.html';
     }else{
         location.replace("to-do-mainpage.html");
     }

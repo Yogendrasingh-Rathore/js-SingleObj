@@ -307,44 +307,67 @@ function todo_Update() {
         if (flag == 0) {
             let get_userData = JSON.parse(localStorage.getItem("users"));
 
-            let to_do_list = [];
-            to_do_list = get_todolist(get_userData);
+            obj = {
+                category: category,
+                task: task,
+                start_date: start_date,
+                end_date: end_date,
+                status: status,
+                isReminder: isReminder,
+                isReminder_date: isReminder_date,
+                isPublic: isPublic
+            };
 
-
-            for (key in to_do_list) {
-                let data = [];
-                data = Object.values(to_do_list[key]);
-
-                if (data[8] == checkbox_id) {
-                    let confirm_update = confirm("Old Record : " +
-                        data[0] + " " + data[1] + " " + data[2] + " " + data[3] + " " + data[4]
-                        + "\nUpdated Record :  " + category + " " + task + " " + start_date + " " + end_date + " " + status
-                        + "\nDo you want to Update");
-                    if (confirm_update == true) {
-                        data[0] = category;
-                        data[1] = task;
-                        data[2] = start_date;
-                        data[3] = end_date;
-                        data[4] = status;
-                        data[5] = isReminder;
-                        data[6] = isReminder_date;
-                        data[7] = isPublic;
-                        to_do_list[key] = data;
-                        alert('Data Updated');
-                    }
-                    break;
-                }
-
-
-            }
 
             for (i = 0; i < get_userData.length; i++) {
                 if (sessionStorage.activeUser === get_userData[i].userName) {
-                    get_userData.todo = to_do_list;
-                    localStorage.setItem("users", JSON.stringify(get_userData));
+                    for (j = 0; j < get_userData[i].todo.length; j++) {
+                        alert(checkbox_id +"  "+get_userData[i].todo[j].id);
+                        if (checkbox_id == get_userData[i].todo[j].id) {
+                            obj.id = get_userData[i].todo[j].id;
+                            get_userData[i].todo[j] = obj;
+                            localStorage.setItem("users", JSON.stringify(get_userData));
+                            break;
+                        }
+                        
+                    }
                     break;
                 }
             }
+            // get_userData[i].todo[j]
+
+            // let to_do_list = [];
+            // to_do_list = get_todolist(get_userData);
+
+
+            // for (key in to_do_list) {
+            //     let data = [];
+            //     data = Object.values(to_do_list[key]);
+
+            //     if (data[8] == checkbox_id) {
+            //         let confirm_update = confirm("Old Record : " +
+            //             data[0] + " " + data[1] + " " + data[2] + " " + data[3] + " " + data[4]
+            //             + "\nUpdated Record :  " + category + " " + task + " " + start_date + " " + end_date + " " + status
+            //             + "\nDo you want to Update");
+            //         if (confirm_update == true) {
+            //             data[0] = category;
+            //             data[1] = task;
+            //             data[2] = start_date;
+            //             data[3] = end_date;
+            //             data[4] = status;
+            //             data[5] = isReminder;
+            //             data[6] = isReminder_date;
+            //             data[7] = isPublic;
+            //             to_do_list[key] = data;
+            //             alert('Data Updated');
+            //         }
+            //         break;
+            //     }
+
+
+            // }
+
+
 
             cleanup();
             location.reload();
@@ -466,10 +489,11 @@ function searchby_taskDetails(to_do_list, selected_data) {
         data = Object.values(to_do_list[key]);
         todoid = data[8];
 
-        if (data[1] === selected_data) {
+        if (data[1].includes(selected_data)) {
             found = "true";
             table_data_appendChild(data);
         }
+
     }
     NoRecordFound(found);
 }
@@ -552,9 +576,9 @@ function date_validation() {
     if (startDate < today) {
         alert("Selected Date must be greater than or equal to today");
         clear();
-    } 
+    }
 
-    if (startDate == "" && endDate != "" ){
+    if (startDate == "" && endDate != "") {
         alert("Must select Start Date before selecting End Date");
         clear();
     }
@@ -563,7 +587,7 @@ function date_validation() {
         alert("End date should be greater than Start date");
         document.getElementById("end_date").value = "";
     }
-    
+
 }
 
 function clear() {
@@ -576,7 +600,7 @@ function startEndDate_validation(startDate, endDate) {
         alert("Must select Start Date before selecting End Date");
         clear();
         return "false";
-    } else if(startDate != "" && endDate == "") {
+    } else if (startDate != "" && endDate == "") {
         alert("Must select the end date");
         return "false";
     } else {
