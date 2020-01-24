@@ -6,6 +6,8 @@ workflows:
           application-name: js-todo
           deployment-group: js-todo
           service-role-arn: arn:aws:iam::539551904532:role/js
+          bundle-bucket: backup-js-todo
+          bundle-key: backupcode
           
 orbs:
   aws-code-deploy: circleci/aws-code-deploy@0.0.10
