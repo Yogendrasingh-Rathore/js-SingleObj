@@ -8,7 +8,7 @@ function auth()
     if(userName == "" || password == "")
     {
         alert("UserName and Password cannot be left blank!");
-        location.href = 'registration.html';
+        location.href = 'index.html';
     }
     
     for (i = 0; i < users.length; i++) {
