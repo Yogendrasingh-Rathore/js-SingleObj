@@ -1,6 +1,6 @@
 (function () {
     if (!sessionStorage.getItem('activeUser')) {
-        location.replace("registration.html");
+        location.replace("index.html");
     }
 
     let get_userData = {};
